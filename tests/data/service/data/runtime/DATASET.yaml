@@ -1,0 +1,4 @@
+profiles:
+  test:
+    files:
+      - data.json
