@@ -1,0 +1,57 @@
+[
+  {
+    "id": "create-order-success",
+    "expected": {
+      "status": 201,
+      "body": {
+        "order_id": "o-1",
+        "total": 120.5,
+        "message": "订单创建成功"
+      }
+    },
+    "actual": {
+      "status": 201,
+      "body": {
+        "order_id": "o-1",
+        "total": 120.5,
+        "message": "订单创建成功"
+      }
+    },
+    "scorers": ["exact_body", "business_rules", "semantic_quality"],
+    "aggregator": {
+      "kind": "weighted_sum",
+      "config": {
+        "weights": {
+          "exact_body": 0.5,
+          "business_rules": 0.3,
+          "semantic_quality": 0.2
+        },
+        "pass_threshold": 0.8,
+        "fail_fast_on": ["exact_body"]
+      }
+    }
+  },
+  {
+    "id": "create-order-failure",
+    "expected": {
+      "status": 201,
+      "body": {
+        "order_id": "o-2",
+        "total": 80,
+        "message": "订单创建成功"
+      }
+    },
+    "actual": {
+      "status": 500,
+      "body": {
+        "order_id": "o-2",
+        "total": 0,
+        "message": "服务器错误"
+      }
+    },
+    "scorers": ["exact_body", "business_rules"],
+    "aggregator": {
+      "kind": "pass_through"
+    }
+  }
+]

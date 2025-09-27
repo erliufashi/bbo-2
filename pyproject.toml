@@ -1,0 +1,20 @@
+[project]
+name = "bbo-orchestrator"
+version = "0.1.0"
+description = "开发编排器示例实现"
+authors = [{name="Example", email="example@example.com"}]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PyYAML",
+    "click",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
