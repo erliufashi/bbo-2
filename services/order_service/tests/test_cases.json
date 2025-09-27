@@ -1,0 +1,41 @@
+[
+  {
+    "id": "create-order-success",
+    "request": {
+      "method": "POST",
+      "path": "/orders",
+      "json": {"user_id": "u-001", "items": [{"sku": "A1", "qty": 2}]}
+    },
+    "expected": {
+      "status": 201,
+      "body": {"status": "created", "order_id": "order-0001"}
+    },
+    "scorers": {
+      "exact_body": {},
+      "business_rules": {}
+    },
+    "aggregator": {
+      "name": "weighted_sum",
+      "config": {
+        "weights": {"exact_body": 0.5, "business_rules": 0.5},
+        "pass_threshold": 0.8,
+        "fail_fast_on": ["exact_body"]
+      }
+    }
+  },
+  {
+    "id": "create-order-empty",
+    "request": {
+      "method": "POST",
+      "path": "/orders",
+      "json": {"user_id": "u-001", "items": []}
+    },
+    "expected": {
+      "status": 400,
+      "body": {"detail": "订单必须包含商品"}
+    },
+    "scorers": {
+      "semantic_quality": {"expected_text": "订单必须包含商品"}
+    }
+  }
+]

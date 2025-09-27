@@ -1,0 +1,49 @@
+{
+  "version": "1.0",
+  "service": {
+    "name": "order-service",
+    "language": "python",
+    "runtime": {
+      "image": "ghcr.io/org/order-service:local",
+      "start_cmd": ["python", "-m", "services.order_service.app.main"],
+      "port": null
+    }
+  },
+  "tests": {
+    "suite_file": "tests/test_cases.json",
+    "registered_scorers": {
+      "exact_body": {
+        "kind": "exact_match",
+        "config": {
+          "json_paths": [
+            "$.status",
+            "$.order_id"
+          ]
+        }
+      },
+      "business_rules": {
+        "kind": "custom_script",
+        "config": {
+          "entrypoint": "services.order_service.tests.scorers.order_rules:score"
+        }
+      },
+      "semantic_quality": {
+        "kind": "llm_scorer",
+        "config": {
+          "pass_threshold": 0.5
+        }
+      }
+    }
+  },
+  "assets": {
+    "manifest": "tests/assets/manifest.yaml"
+  },
+  "datasets": {
+    "runtime": [
+      {
+        "file": "data/runtime/DATASET.yaml",
+        "profile": "test"
+      }
+    ]
+  }
+}
