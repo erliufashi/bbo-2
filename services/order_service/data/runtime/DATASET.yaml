@@ -1,0 +1,8 @@
+{
+  "runtime": [
+    {
+      "file": "sample-data.json",
+      "profile": "test"
+    }
+  ]
+}
