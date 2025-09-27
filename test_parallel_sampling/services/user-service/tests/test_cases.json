@@ -1,0 +1,100 @@
+[
+  {
+    "id": "create-user-success",
+    "tags": ["smoke", "core"],
+    "request": {
+      "method": "POST",
+      "path": "/users",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "json": {
+        "username": "testuser001",
+        "email": "test001@example.com",
+        "password": "SecurePass123!"
+      }
+    },
+    "expected": {
+      "status": 201,
+      "json": {
+        "id": "<uuid>",
+        "username": "testuser001",
+        "email": "test001@example.com",
+        "created_at": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"},
+        {"use": "response_schema"},
+        {"use": "business_logic"}
+      ]
+    }
+  },
+  {
+    "id": "get-user-by-id",
+    "tags": ["core"],
+    "request": {
+      "method": "GET",
+      "path": "/users/123e4567-e89b-12d3-a456-426614174000"
+    },
+    "expected": {
+      "status": 200,
+      "json": {
+        "id": "123e4567-e89b-12d3-a456-426614174000",
+        "username": "<any-non-empty>",
+        "email": "<any-non-empty>",
+        "created_at": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"},
+        {"use": "response_schema"}
+      ]
+    }
+  },
+  {
+    "id": "create-user-invalid-email",
+    "tags": ["validation"],
+    "request": {
+      "method": "POST",
+      "path": "/users",
+      "json": {
+        "username": "testuser",
+        "email": "invalid-email",
+        "password": "password"
+      }
+    },
+    "expected": {
+      "status": 400,
+      "json": {
+        "error": "Invalid email format"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  },
+  {
+    "id": "get-nonexistent-user",
+    "tags": ["error-handling"],
+    "request": {
+      "method": "GET",
+      "path": "/users/nonexistent-id"
+    },
+    "expected": {
+      "status": 404,
+      "json": {
+        "error": "User not found"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  }
+]

@@ -1,0 +1,61 @@
+version: "1.0"
+service:
+  name: user-service
+  language: python
+  runtime:
+    image: "python:3.11-slim"
+    start_cmd: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    port: 8000
+
+tests:
+  suite_file: tests/test_cases.json
+  registered_scorers:
+    exact_status:
+      kind: exact_match
+      config:
+        json_paths:
+          - "$.status"
+    response_schema:
+      kind: exact_match
+      config:
+        json_paths:
+          - "$.body"
+        allow_placeholders:
+          "<any-non-empty>": "non_empty"
+          "<uuid>": "uuid_v4"
+    business_logic:
+      kind: custom_script
+      config:
+        entrypoint: "tests/scorers/user_validation.py:score"
+        python:
+          version: "3.11"
+        sandbox:
+          network: false
+          filesystem_readonly: true
+
+  default_aggregator:
+    kind: weighted_sum
+    weights:
+      exact_status: 0.3
+      response_schema: 0.4
+      business_logic: 0.3
+    pass_threshold: 0.8
+
+datasets:
+  runtime:
+    - id: "user.seed.v1"
+      source:
+        type: "local"
+        path: "data/seed_users.json"
+      loader:
+        script: "data/scripts/load_users.py"
+
+dependencies: []
+
+test_matrix:
+  - name: "fast-local"
+    description: "快速本地验证"
+    include_tags: ["smoke", "core"]
+  - name: "full-regression"
+    description: "完整回归测试"
+    include_tags: ["all"]

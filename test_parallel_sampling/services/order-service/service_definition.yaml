@@ -1,0 +1,70 @@
+version: "1.0"
+service:
+  name: order-service
+  language: python
+  runtime:
+    image: "python:3.11-slim"
+    start_cmd: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8002"]
+    port: 8002
+
+tests:
+  suite_file: tests/test_cases.json
+  registered_scorers:
+    exact_status:
+      kind: exact_match
+      config:
+        json_paths:
+          - "$.status"
+    order_business_rules:
+      kind: custom_script
+      config:
+        entrypoint: "tests/scorers/order_rules.py:score"
+        python:
+          version: "3.11"
+        sandbox:
+          network: false
+          filesystem_readonly: true
+
+  default_aggregator:
+    kind: weighted_sum
+    weights:
+      exact_status: 0.3
+      order_business_rules: 0.7
+    pass_threshold: 0.9
+
+dependencies:
+  - id: "user-service"
+    contract:
+      type: "openapi"
+      file: "../user-service/api/openapi.yaml"
+    endpoints:
+      base: "http://user-service:8000"
+      health: "/health"
+    runtime:
+      default_mode: "mock"
+      mock:
+        kind: "openapi_stub"
+        fixtures_dir: "tests/fixtures/user-service"
+  
+  - id: "product-service"
+    contract:
+      type: "openapi"
+      file: "../product-service/api/openapi.yaml"
+    endpoints:
+      base: "http://product-service:8001"
+      health: "/health"
+    runtime:
+      default_mode: "mock"
+      mock:
+        kind: "openapi_stub"
+        fixtures_dir: "tests/fixtures/product-service"
+
+test_matrix:
+  - name: "fast-mock"
+    description: "使用Mock依赖的快速测试"
+    dependency_mode: "mock"
+    include_tags: ["smoke", "core"]
+  - name: "integration"
+    description: "真实依赖的集成测试"
+    dependency_mode: "real"
+    include_tags: ["integration"]

@@ -1,0 +1,85 @@
+{
+  "start_time": 1758984069.556655,
+  "services": {
+    "product-service": {
+      "service": "product-service",
+      "attempts": [
+        {
+          "status": "failed",
+          "service": "product-service",
+          "attempt": 1,
+          "error": "No Python files generated"
+        },
+        {
+          "status": "failed",
+          "service": "product-service",
+          "attempt": 2,
+          "error": "No Python files generated"
+        },
+        {
+          "status": "failed",
+          "service": "product-service",
+          "attempt": 3,
+          "error": "No Python files generated"
+        }
+      ],
+      "final_status": "failed"
+    },
+    "user-service": {
+      "service": "user-service",
+      "attempts": [
+        {
+          "status": "failed",
+          "service": "user-service",
+          "attempt": 1,
+          "error": "No Python files generated"
+        },
+        {
+          "status": "failed",
+          "service": "user-service",
+          "attempt": 2,
+          "error": "No Python files generated"
+        },
+        {
+          "status": "failed",
+          "service": "user-service",
+          "attempt": 3,
+          "error": "No Python files generated"
+        }
+      ],
+      "final_status": "failed"
+    },
+    "order-service": {
+      "service": "order-service",
+      "attempts": [
+        {
+          "status": "failed",
+          "service": "order-service",
+          "attempt": 1,
+          "error": "No Python files generated"
+        },
+        {
+          "status": "failed",
+          "service": "order-service",
+          "attempt": 2,
+          "error": "No Python files generated"
+        },
+        {
+          "status": "failed",
+          "service": "order-service",
+          "attempt": 3,
+          "error": "No Python files generated"
+        }
+      ],
+      "final_status": "failed"
+    }
+  },
+  "summary": {
+    "total": 3,
+    "success": 0,
+    "partial_success": 0,
+    "failed": 3
+  },
+  "end_time": 1758984082.1483867,
+  "duration": 12.591731786727905
+}

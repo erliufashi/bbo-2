@@ -1,0 +1,102 @@
+[
+  {
+    "id": "list-products",
+    "tags": ["smoke", "core"],
+    "request": {
+      "method": "GET",
+      "path": "/products"
+    },
+    "expected": {
+      "status": 200,
+      "json": {
+        "products": "<any-non-empty>",
+        "total": "<any-non-empty>",
+        "page": 1,
+        "limit": 10
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"},
+        {"use": "product_validation"}
+      ]
+    }
+  },
+  {
+    "id": "create-product",
+    "tags": ["core"],
+    "request": {
+      "method": "POST",
+      "path": "/products",
+      "json": {
+        "name": "Test Product",
+        "price": 99.99,
+        "description": "A test product",
+        "category": "electronics"
+      }
+    },
+    "expected": {
+      "status": 201,
+      "json": {
+        "id": "<uuid>",
+        "name": "Test Product",
+        "price": 99.99,
+        "description": "A test product",
+        "category": "electronics",
+        "created_at": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"},
+        {"use": "product_validation"}
+      ]
+    }
+  },
+  {
+    "id": "get-product-by-id",
+    "tags": ["core"],
+    "request": {
+      "method": "GET",
+      "path": "/products/prod-123"
+    },
+    "expected": {
+      "status": 200,
+      "json": {
+        "id": "prod-123",
+        "name": "<any-non-empty>",
+        "price": "<any-non-empty>",
+        "category": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  },
+  {
+    "id": "create-invalid-product",
+    "tags": ["validation"],
+    "request": {
+      "method": "POST",
+      "path": "/products",
+      "json": {
+        "name": "",
+        "price": -10,
+        "description": "Invalid product"
+      }
+    },
+    "expected": {
+      "status": 400,
+      "json": {
+        "error": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  }
+]

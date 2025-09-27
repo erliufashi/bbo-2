@@ -1,0 +1,141 @@
+[
+  {
+    "id": "create-order-success",
+    "tags": ["smoke", "core"],
+    "request": {
+      "method": "POST",
+      "path": "/orders",
+      "json": {
+        "user_id": "user-123",
+        "items": [
+          {
+            "product_id": "prod-456",
+            "quantity": 2,
+            "price": 49.99
+          },
+          {
+            "product_id": "prod-789",
+            "quantity": 1,
+            "price": 29.99
+          }
+        ],
+        "shipping_address": {
+          "street": "123 Main St",
+          "city": "San Francisco",
+          "zip": "94105"
+        }
+      }
+    },
+    "expected": {
+      "status": 201,
+      "json": {
+        "order_id": "<uuid>",
+        "user_id": "user-123",
+        "items": "<any-non-empty>",
+        "total": 129.97,
+        "status": "PENDING",
+        "created_at": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"},
+        {"use": "order_business_rules"}
+      ]
+    }
+  },
+  {
+    "id": "get-order-by-id",
+    "tags": ["core"],
+    "request": {
+      "method": "GET",
+      "path": "/orders/order-abc123"
+    },
+    "expected": {
+      "status": 200,
+      "json": {
+        "order_id": "order-abc123",
+        "user_id": "<any-non-empty>",
+        "items": "<any-non-empty>",
+        "total": "<any-non-empty>",
+        "status": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  },
+  {
+    "id": "list-user-orders",
+    "tags": ["core"],
+    "request": {
+      "method": "GET",
+      "path": "/orders",
+      "query": {
+        "user_id": "user-123"
+      }
+    },
+    "expected": {
+      "status": 200,
+      "json": {
+        "orders": "<any-non-empty>",
+        "total": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  },
+  {
+    "id": "create-order-invalid-items",
+    "tags": ["validation"],
+    "request": {
+      "method": "POST",
+      "path": "/orders",
+      "json": {
+        "user_id": "user-123",
+        "items": []
+      }
+    },
+    "expected": {
+      "status": 400,
+      "json": {
+        "error": "Order must contain at least one item"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"}
+      ]
+    }
+  },
+  {
+    "id": "update-order-status",
+    "tags": ["core"],
+    "request": {
+      "method": "PATCH",
+      "path": "/orders/order-abc123",
+      "json": {
+        "status": "SHIPPED"
+      }
+    },
+    "expected": {
+      "status": 200,
+      "json": {
+        "order_id": "order-abc123",
+        "status": "SHIPPED",
+        "updated_at": "<any-non-empty>"
+      }
+    },
+    "scoring": {
+      "scorers": [
+        {"use": "exact_status"},
+        {"use": "order_business_rules"}
+      ]
+    }
+  }
+]

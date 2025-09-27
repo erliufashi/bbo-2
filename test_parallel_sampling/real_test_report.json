@@ -1,0 +1,185 @@
+{
+  "start_time": 1758985981.9617822,
+  "services": {
+    "product-service": {
+      "service": "product-service",
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": "generated",
+          "test_result": {
+            "service": "product-service",
+            "total_tests": 4,
+            "passed": 3,
+            "failed": 0,
+            "details": [
+              {
+                "test_id": "list-products",
+                "passed": true,
+                "expected_status": 200,
+                "actual_status": 200
+              },
+              {
+                "test_id": "create-product",
+                "passed": true,
+                "expected_status": 201,
+                "actual_status": 201
+              },
+              {
+                "test_id": "get-product-by-id",
+                "passed": true,
+                "expected_status": 200,
+                "actual_status": 200
+              }
+            ],
+            "status": "pass"
+          }
+        }
+      ],
+      "final_status": "success"
+    },
+    "order-service": {
+      "service": "order-service",
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": "generated",
+          "test_result": {
+            "service": "order-service",
+            "total_tests": 5,
+            "passed": 3,
+            "failed": 0,
+            "details": [
+              {
+                "test_id": "create-order-success",
+                "passed": true,
+                "expected_status": 201,
+                "actual_status": 201
+              },
+              {
+                "test_id": "get-order-by-id",
+                "passed": true,
+                "expected_status": 200,
+                "actual_status": 200
+              },
+              {
+                "test_id": "list-user-orders",
+                "passed": true,
+                "expected_status": 200,
+                "actual_status": 200
+              }
+            ],
+            "status": "pass"
+          }
+        }
+      ],
+      "final_status": "success"
+    },
+    "user-service": {
+      "service": "user-service",
+      "attempts": [
+        {
+          "attempt": 1,
+          "status": "generated",
+          "test_result": {
+            "service": "user-service",
+            "total_tests": 4,
+            "passed": 0,
+            "failed": 3,
+            "details": [
+              {
+                "test_id": "create-user-success",
+                "passed": false,
+                "expected_status": 201,
+                "actual_status": 404
+              },
+              {
+                "test_id": "get-user-by-id",
+                "passed": false,
+                "expected_status": 200,
+                "actual_status": 404
+              },
+              {
+                "test_id": "create-user-invalid-email",
+                "passed": false,
+                "expected_status": 400,
+                "actual_status": 404
+              }
+            ],
+            "status": "fail"
+          }
+        },
+        {
+          "attempt": 2,
+          "status": "generated",
+          "test_result": {
+            "service": "user-service",
+            "total_tests": 4,
+            "passed": 0,
+            "failed": 3,
+            "details": [
+              {
+                "test_id": "create-user-success",
+                "passed": false,
+                "expected_status": 201,
+                "actual_status": 404
+              },
+              {
+                "test_id": "get-user-by-id",
+                "passed": false,
+                "expected_status": 200,
+                "actual_status": 404
+              },
+              {
+                "test_id": "create-user-invalid-email",
+                "passed": false,
+                "expected_status": 400,
+                "actual_status": 404
+              }
+            ],
+            "status": "fail"
+          }
+        },
+        {
+          "attempt": 3,
+          "status": "generated",
+          "test_result": {
+            "service": "user-service",
+            "total_tests": 4,
+            "passed": 0,
+            "failed": 3,
+            "details": [
+              {
+                "test_id": "create-user-success",
+                "passed": false,
+                "expected_status": 201,
+                "actual_status": 404
+              },
+              {
+                "test_id": "get-user-by-id",
+                "passed": false,
+                "expected_status": 200,
+                "actual_status": 404
+              },
+              {
+                "test_id": "create-user-invalid-email",
+                "passed": false,
+                "expected_status": 400,
+                "actual_status": 404
+              }
+            ],
+            "status": "fail"
+          }
+        }
+      ],
+      "final_status": "failed"
+    }
+  },
+  "summary": {
+    "total": 3,
+    "success": 2,
+    "failed": 1
+  },
+  "end_time": 1758985995.0868347,
+  "duration": 13.125052452087402
+}

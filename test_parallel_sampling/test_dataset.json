@@ -1,0 +1,168 @@
+{
+  "microservices": [
+    {
+      "name": "user-service",
+      "description": "用户管理服务",
+      "endpoints": [
+        {
+          "path": "/users",
+          "method": "POST",
+          "description": "创建新用户",
+          "request": {
+            "body": {
+              "username": "string",
+              "email": "string",
+              "password": "string"
+            }
+          },
+          "response": {
+            "status": 201,
+            "body": {
+              "id": "string",
+              "username": "string",
+              "email": "string",
+              "created_at": "string"
+            }
+          }
+        },
+        {
+          "path": "/users/{id}",
+          "method": "GET",
+          "description": "获取用户信息",
+          "response": {
+            "status": 200,
+            "body": {
+              "id": "string",
+              "username": "string",
+              "email": "string",
+              "created_at": "string"
+            }
+          }
+        }
+      ],
+      "test_cases": [
+        {
+          "id": "create-user-success",
+          "request": {
+            "method": "POST",
+            "path": "/users",
+            "body": {
+              "username": "testuser",
+              "email": "test@example.com",
+              "password": "password123"
+            }
+          },
+          "expected": {
+            "status": 201,
+            "body_contains": ["id", "username", "email"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "product-service",
+      "description": "产品管理服务",
+      "endpoints": [
+        {
+          "path": "/products",
+          "method": "GET",
+          "description": "获取产品列表",
+          "response": {
+            "status": 200,
+            "body": {
+              "products": "array",
+              "total": "number"
+            }
+          }
+        },
+        {
+          "path": "/products",
+          "method": "POST",
+          "description": "创建新产品",
+          "request": {
+            "body": {
+              "name": "string",
+              "price": "number",
+              "description": "string"
+            }
+          },
+          "response": {
+            "status": 201,
+            "body": {
+              "id": "string",
+              "name": "string",
+              "price": "number"
+            }
+          }
+        }
+      ],
+      "test_cases": [
+        {
+          "id": "list-products",
+          "request": {
+            "method": "GET",
+            "path": "/products"
+          },
+          "expected": {
+            "status": 200,
+            "body_contains": ["products", "total"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "order-service",
+      "description": "订单管理服务",
+      "endpoints": [
+        {
+          "path": "/orders",
+          "method": "POST",
+          "description": "创建订单",
+          "request": {
+            "body": {
+              "user_id": "string",
+              "items": [
+                {
+                  "product_id": "string",
+                  "quantity": "number"
+                }
+              ]
+            }
+          },
+          "response": {
+            "status": 201,
+            "body": {
+              "order_id": "string",
+              "user_id": "string",
+              "items": "array",
+              "total": "number",
+              "status": "string"
+            }
+          }
+        }
+      ],
+      "test_cases": [
+        {
+          "id": "create-order",
+          "request": {
+            "method": "POST",
+            "path": "/orders",
+            "body": {
+              "user_id": "user123",
+              "items": [
+                {
+                  "product_id": "prod456",
+                  "quantity": 2
+                }
+              ]
+            }
+          },
+          "expected": {
+            "status": 201,
+            "body_contains": ["order_id", "total", "status"]
+          }
+        }
+      ]
+    }
+  ]
+}

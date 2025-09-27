@@ -1,0 +1,46 @@
+version: "1.0"
+service:
+  name: product-service
+  language: python
+  runtime:
+    image: "python:3.11-slim"
+    start_cmd: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+    port: 8001
+
+tests:
+  suite_file: tests/test_cases.json
+  registered_scorers:
+    exact_status:
+      kind: exact_match
+      config:
+        json_paths:
+          - "$.status"
+    product_validation:
+      kind: custom_script
+      config:
+        entrypoint: "tests/scorers/product_rules.py:score"
+        python:
+          version: "3.11"
+        sandbox:
+          network: false
+
+  default_aggregator:
+    kind: weighted_sum
+    weights:
+      exact_status: 0.4
+      product_validation: 0.6
+    pass_threshold: 0.85
+
+datasets:
+  runtime:
+    - id: "products.catalog.v1"
+      source:
+        type: "local"
+        path: "data/products.json"
+
+dependencies: []
+
+test_matrix:
+  - name: "fast-local"
+    description: "快速本地验证"
+    include_tags: ["smoke", "core"]
