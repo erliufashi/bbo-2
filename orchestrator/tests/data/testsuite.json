@@ -1,0 +1,40 @@
+[
+  {
+    "id": "case-1",
+    "scorers": [
+      {
+        "alias": "exact",
+        "use": "exact_body",
+        "expected": {"status": 201},
+        "actual": {"status": 201}
+      },
+      {
+        "alias": "rule",
+        "use": "rule_score",
+        "expected": 10,
+        "actual": 12
+      }
+    ],
+    "aggregator": {
+      "kind": "weighted_sum",
+      "weights": {"exact": 0.6, "rule": 0.4},
+      "pass_threshold": 0.8
+    }
+  },
+  {
+    "id": "case-2",
+    "scorers": [
+      {
+        "alias": "semantic",
+        "use": "semantic",
+        "expected": "服务运行成功",
+        "actual": "服务运行成功"
+      }
+    ],
+    "aggregator": {
+      "kind": "weighted_sum",
+      "weights": {"semantic": 1.0},
+      "pass_threshold": 0.5
+    }
+  }
+]
